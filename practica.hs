@@ -16,7 +16,6 @@ type VoteFunc = WeightPair -> String
 type AccuracyFunc = [String] -> [String] -> Float
 type WeightPair = [(Float, String)]
 
--- Distance methods
 euclideanDistance :: DistanceFunc
 euclideanDistance (Flower a _) (Flower a2 _) =
     sqrt $ sum $ zipWith (\x y -> (x - y) ** 2) a a2
@@ -30,7 +29,6 @@ allDistances f l e = zip d s
     where d = map (f e) l
           s = [sp | Flower {specie = sp} <- l]
 
--- Voting methods
 simpleVote :: VoteFunc
 simpleVote l = snd $ maximum reverted
     where ones = map (\x -> (snd x, 1)) l
@@ -43,7 +41,6 @@ weightedVote l = snd $ maximum revert
           add = Map.toList (Map.fromListWith (+) invert)
           revert = map (\x -> (snd x, fst x)) add
 
--- Evaluation methods
 evaluateAccuracy :: AccuracyFunc
 evaluateAccuracy l ll = (total $ coincide l ll) / (fromIntegral $ length l)
     where coincide p1 p2 = [x == y | (x, y) <- zip p1 p2]
@@ -57,8 +54,6 @@ knn fdist fvote facc (Data train test) n = eval
     where dists = map (\x -> take n $ List.sort $ (allDistances fdist train x)) test
           spec = map fvote dists
           eval = facc spec [sp | Flower {specie = sp} <- test]
-
--- Auxiliary methods
 
 -- parseLines ["4.9,2.4,3.3,1.0,Iris-versicolor\r"]
 -- [["4.9","2.4","3.3","1.0","versicolor"]]
