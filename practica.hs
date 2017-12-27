@@ -24,7 +24,7 @@ manhattanDistance :: DistanceFunc
 manhattanDistance (Flower a _) (Flower a2 _) =
     sum $ zipWith (\x y -> abs (x - y)) a a2
 
-allDistances :: DistanceFunc -> [Flower] -> (Flower) -> WeightPair
+allDistances :: DistanceFunc -> [Flower] -> Flower -> WeightPair
 allDistances f l e = zip d s
     where d = map (f e) l
           s = [sp | Flower {specie = sp} <- l]
